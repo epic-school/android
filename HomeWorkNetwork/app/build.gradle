@@ -7,14 +7,20 @@ plugins {
 android {
     compileSdk 31
 
+    packagingOptions {
+        pickFirst 'META-INF/DEPENDENCIES'
+        pickFirst 'META-INF/INDEX.LIST'
+        pickFirst 'META-INF/io.netty.versions.properties'
+    }
+
     defaultConfig {
 
         buildConfigField "String", "API_BASE_URL", '"api.themoviedb.org"'
-        buildConfigField "String", "API_KEY", '"/*ваш ap_key*/"'
+        buildConfigField "String", "API_KEY", '"6259c72d2e1c19b81663e5e9e9ef7356"'
         buildConfigField "String", "API_IMAGE_BASE_URL", '"https://image.tmdb.org/t/p/w500"'
 
         applicationId "com.pg.homeworknetwork"
-        minSdk 30
+        minSdk 21
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -46,4 +52,22 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
+
+    //Coroutine
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0'
+
+    //Interceptor
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.8.1'
+
+    // ktor
+    implementation 'io.ktor:ktor-client-core:1.6.7'
+    implementation 'io.ktor:ktor-client-android:1.6.7'
+    implementation 'io.ktor:ktor-client-serialization:1.6.7'
+    implementation 'io.ktor:ktor-client-logging:1.6.7'
+    implementation 'io.ktor:ktor-client-cio:1.6.7'
+    implementation 'io.ktor:ktor-server-core:1.6.7'
+    implementation 'io.ktor:ktor-server-netty:1.6.7'
 }
