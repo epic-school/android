@@ -12,8 +12,9 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.pg.homeworknetwork.BuildConfig
 import com.pg.homeworknetwork.R
+import com.pg.homeworknetwork.model.Movie
 import com.pg.homeworknetwork.repo.TmdbRepo
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
     lateinit var poster: ImageView
@@ -21,6 +22,8 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
     lateinit var overview: TextView
     private lateinit var popularity: TextView
     private lateinit var releaseDate: TextView
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,16 +37,16 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
 
         val movieId = arguments?.getInt(ARG_ID) ?: 550
 
-        runBlocking {
-            TmdbRepo.getMovie(movieId)
-        }?.let {
-            poster.load("${BuildConfig.API_IMAGE_BASE_URL}${it.posterPath}") {
-                transformations(RoundedCornersTransformation(16f))
+        scope.launch {
+            TmdbRepo.getMovie(movieId)?.let {
+                poster.load("${BuildConfig.API_IMAGE_BASE_URL}${it.posterPath}") {
+                    transformations(RoundedCornersTransformation(16f))
+                }
+                originalTitle.text = it.originalTitle
+                overview.text = it.overview
+                popularity.text = it.popularity.toString()
+                releaseDate.text = it.releaseDate
             }
-            originalTitle.text = it.originalTitle
-            overview.text = it.overview
-            popularity.text = it.popularity.toString()
-            releaseDate.text = it.releaseDate
         }
 
         activity?.onBackPressedDispatcher?.addCallback(

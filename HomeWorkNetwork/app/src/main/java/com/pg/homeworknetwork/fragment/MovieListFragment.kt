@@ -11,10 +11,12 @@ import com.pg.homeworknetwork.R
 import com.pg.homeworknetwork.adapter.MovieItemAdapter
 import com.pg.homeworknetwork.model.Movie
 import com.pg.homeworknetwork.repo.TmdbRepo
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 
 class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
     lateinit var recycler: RecyclerView
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     private val goToDetails = object : MovieItemAdapter.IOnItemClick {
         override fun onItemClick(movie: Movie) {
@@ -38,10 +40,10 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
         }
         val adapter = (recycler.adapter as MovieItemAdapter)
 
-        runBlocking {
-            TmdbRepo.getMovies()
-        }?.let {
-            adapter.submitList(it.results)
+        scope.launch {
+            TmdbRepo.getMovies()?.let {
+                adapter.submitList(it.results)
+            }
         }
 
         super.onViewCreated(view, savedInstanceState)
