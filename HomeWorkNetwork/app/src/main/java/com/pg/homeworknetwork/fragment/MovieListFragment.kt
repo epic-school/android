@@ -1,4 +1,4 @@
-package com.pg.homeworknetwork
+package com.pg.homeworknetwork.fragment
 
 import android.os.Bundle
 import android.view.View
@@ -7,6 +7,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.pg.homeworknetwork.R
+import com.pg.homeworknetwork.adapter.MovieItemAdapter
+import com.pg.homeworknetwork.model.Movie
+import com.pg.homeworknetwork.repo.TmdbRepo
+import kotlinx.coroutines.runBlocking
 
 class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
     lateinit var recycler: RecyclerView
@@ -16,7 +21,8 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             val manager: FragmentManager = parentFragmentManager
             val transaction: FragmentTransaction = manager.beginTransaction()
             val detailsFragment = MovieDetailFragment()
-            detailsFragment.arguments = Bundle().apply { putInt(MovieDetailFragment.ARG_ID, movie.id) }
+            detailsFragment.arguments =
+                Bundle().apply { putInt(MovieDetailFragment.ARG_ID, movie.id) }
             transaction.replace(R.id.mainFragment, detailsFragment)
             transaction.commit()
         }
@@ -31,8 +37,13 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             }
         }
         val adapter = (recycler.adapter as MovieItemAdapter)
-        val movies = //получаем фильмы
-        adapter.submitList(movies)
+
+        runBlocking {
+            TmdbRepo.getMovies()
+        }?.let {
+            adapter.submitList(it.results)
+        }
+
         super.onViewCreated(view, savedInstanceState)
     }
 

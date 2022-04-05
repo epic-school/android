@@ -1,4 +1,4 @@
-package com.pg.homeworknetwork
+package com.pg.homeworknetwork.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import com.pg.homeworknetwork.BuildConfig
+import com.pg.homeworknetwork.R
+import com.pg.homeworknetwork.model.Movie
 
 internal class MovieItemAdapter : ListAdapter<Movie, MovieItemAdapter.ViewHolder>(MOVIE_COMPARATOR) {
     private var clickListener: IOnItemClick? = null
