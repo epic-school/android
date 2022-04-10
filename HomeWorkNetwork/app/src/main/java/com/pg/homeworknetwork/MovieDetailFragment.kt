@@ -23,6 +23,7 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
     lateinit var releaseDate: TextView
 
     private val corScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val service = Api.create()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -36,7 +37,7 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
 
         corScope.launch {
             val movieId = arguments?.getInt(ARG_ID) ?: 550
-            val movie = Api().getMovieById(movieId) //получаем фильм
+            val movie = service.getMovieById(movieId) //получаем фильм
             poster.load("${BuildConfig.API_IMAGE_BASE_URL}${movie.posterPath}") {
                 transformations(RoundedCornersTransformation(16f))
             }

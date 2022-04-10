@@ -16,6 +16,7 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
     lateinit var recycler: RecyclerView
 
     private val corScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    private val service = Api.create()
 
     private val goToDetails = object : MovieItemAdapter.IOnItemClick {
         override fun onItemClick(movie: Movie) {
@@ -39,7 +40,7 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
         }
         val adapter = (recycler.adapter as MovieItemAdapter)
         corScope.launch(Dispatchers.IO) {
-            val movies: Movies = Api().getTopRatedMovies() //получаем фильмы
+            val movies: Movies = service.getPopularMovies() //получаем фильмы
             adapter.submitList(movies.results)
         }
         super.onViewCreated(view, savedInstanceState)
