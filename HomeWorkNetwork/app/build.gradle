@@ -7,14 +7,27 @@ plugins {
 android {
     compileSdk 31
 
+    packagingOptions {
+        /* A failure occurred while executing com.android.build.gradle.internal.tasks.MergeJavaResWorkAction
+         */
+        pickFirst 'META-INF/DEPENDENCIES'
+        pickFirst 'META-INF/INDEX.LIST'
+        pickFirst 'META-INF/io.netty.versions.properties'
+    }
+
+
+
+
+
     defaultConfig {
 
         buildConfigField "String", "API_BASE_URL", '"api.themoviedb.org"'
-        buildConfigField "String", "API_KEY", '"/*ваш ap_key*/"'
+        buildConfigField "String", "API_KEY", '"14b7da11c0f7fbc92f26a7cbcd9ff925"'
         buildConfigField "String", "API_IMAGE_BASE_URL", '"https://image.tmdb.org/t/p/w500"'
 
         applicationId "com.pg.homeworknetwork"
         minSdk 30
+
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -28,6 +41,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -38,6 +54,7 @@ android {
 }
 
 dependencies {
+    def v_ktr = '1.6.8'
     //Coil (загрузка постеров)
     implementation "io.coil-kt:coil-compose:2.0.0-rc02"
 
@@ -46,4 +63,15 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+    //my
+    implementation("io.ktor:ktor-server-core:${v_ktr}")
+    implementation("io.ktor:ktor-server-netty:${v_ktr}")
+    implementation("ch.qos.logback:logback-classic:1.2.5")
+    implementation("io.ktor:ktor-client-logging:${v_ktr}")
+    implementation("io.ktor:ktor-client-serialization:${v_ktr}")
+    implementation("io.ktor:ktor-client-cio:${v_ktr}")
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2"
+
+
+    //
 }
