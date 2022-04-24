@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
     lateinit var poster: ImageView
@@ -28,24 +30,26 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
             releaseDate = findViewById(R.id.releaseDate)
         }
 
-        val movieId = arguments?.getInt(ARG_ID) ?: 550
-        val movie = //получаем фильм
-        poster.load("${BuildConfig.API_IMAGE_BASE_URL}${movie.posterPath}") {
-            transformations(RoundedCornersTransformation(16f))
-        }
-        originalTitle.text = movie.originalTitle
-        overview.text = movie.overview
-        popularity.text = movie.popularity.toString()
-        releaseDate.text = movie.releaseDate
+        val userId = arguments?.getInt(ARG_ID) ?: 550
 
-        activity?.onBackPressedDispatcher?.addCallback(this.viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                val manager: FragmentManager = parentFragmentManager
-                val transaction: FragmentTransaction = manager.beginTransaction()
-                transaction.replace(R.id.mainFragment, MovieListFragment())
-                transaction.commit()
+        runBlocking (Dispatchers.IO){
+            val user: User = Api().getUser(userId).data
+            poster.load("${user.avatar}") {
+                transformations(RoundedCornersTransformation(16f))
             }
-        })
+            originalTitle.text = user.first_name
+        }
+
+        activity?.onBackPressedDispatcher?.addCallback(
+            this.viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val manager: FragmentManager = parentFragmentManager
+                    val transaction: FragmentTransaction = manager.beginTransaction()
+                    transaction.replace(R.id.mainFragment, MovieListFragment())
+                    transaction.commit()
+                }
+            })
     }
 
     companion object {

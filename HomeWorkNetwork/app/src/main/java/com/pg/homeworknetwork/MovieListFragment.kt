@@ -7,16 +7,19 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
     lateinit var recycler: RecyclerView
 
     private val goToDetails = object : MovieItemAdapter.IOnItemClick {
-        override fun onItemClick(movie: Movie) {
+        override fun onItemClick(user: User) {
             val manager: FragmentManager = parentFragmentManager
             val transaction: FragmentTransaction = manager.beginTransaction()
             val detailsFragment = MovieDetailFragment()
-            detailsFragment.arguments = Bundle().apply { putInt(MovieDetailFragment.ARG_ID, movie.id) }
+            detailsFragment.arguments =
+                Bundle().apply { putInt(MovieDetailFragment.ARG_ID, user.id) }
             transaction.replace(R.id.mainFragment, detailsFragment)
             transaction.commit()
         }
@@ -31,8 +34,12 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             }
         }
         val adapter = (recycler.adapter as MovieItemAdapter)
-        val movies = //получаем фильмы
-        adapter.submitList(movies)
+
+        runBlocking(Dispatchers.IO) {
+            val users: Users = Api().getUsers()
+            adapter.submitList(users.data)
+        }
+
         super.onViewCreated(view, savedInstanceState)
     }
 
