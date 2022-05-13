@@ -64,7 +64,8 @@ class NoteListViewModel constructor(
     }
 
     fun onIsCompletedClick(note: NoteEntity) {
-        // TODO Добавить вызов noteDao для обновления элемента в таблице.
+        noteDao.updateNote(note)
+        // [DONE] TODO Добавить вызов noteDao для обновления элемента в таблице.
     }
 
     override fun onCleared() {

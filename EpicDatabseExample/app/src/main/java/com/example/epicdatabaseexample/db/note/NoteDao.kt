@@ -26,7 +26,10 @@ abstract class NoteDao {
     @Query("DELETE FROM note_table")
     abstract fun deleteAllNote(): Completable
 
-    // TODO Добавить метод для обновления одного элемента.
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    abstract fun updateNote(note: NoteEntity): Completable
+
+    // [DONE] TODO Добавить метод для обновления одного элемента.
     //  Что можно указать в качестве возвращаемого типа?
     //  Напомню, что выше есть метод observeNoteList, который будет вызываться при любом
     //  изменении списка в Базе Данных.
