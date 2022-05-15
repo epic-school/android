@@ -13,7 +13,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 
-internal class MovieItemAdapter : ListAdapter<Movie, MovieItemAdapter.ViewHolder>(MOVIE_COMPARATOR) {
+internal class
+MovieItemAdapter : ListAdapter<Movie, MovieItemAdapter.ViewHolder>(MOVIE_COMPARATOR) {
     private var clickListener: IOnItemClick? = null
 
     fun setClickListener(listener: IOnItemClick?) {
