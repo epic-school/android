@@ -16,5 +16,6 @@ data class PersonEntity(
     companion object {
         const val COLUMN_NAME = "name"
         const val DEFAULT_PERSON_NAME = "UNKNOWN"
+        const val DEFAULT_IS_COMPLETED = false
     }
 }

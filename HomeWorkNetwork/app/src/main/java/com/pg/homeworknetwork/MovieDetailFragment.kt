@@ -10,8 +10,12 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import coil.load
 import coil.transform.RoundedCornersTransformation
-
+//
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
+//
 class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
+
     lateinit var poster: ImageView
     lateinit var originalTitle: TextView
     lateinit var overview: TextView
@@ -21,6 +25,7 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(view) {
+            println("view:"+ view)
             poster = findViewById(R.id.poster)
             originalTitle = findViewById(R.id.originalTitle)
             overview = findViewById(R.id.overview)
@@ -28,8 +33,8 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
             releaseDate = findViewById(R.id.releaseDate)
         }
 
-        val movieId = arguments?.getInt(ARG_ID) ?: 550
-        val movie = //получаем фильм
+      //  val movieId = arguments?.getInt(ARG_ID) ?: 550
+        /*val movie = //получаем фильм
         poster.load("${BuildConfig.API_IMAGE_BASE_URL}${movie.posterPath}") {
             transformations(RoundedCornersTransformation(16f))
         }
@@ -37,6 +42,22 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
         overview.text = movie.overview
         popularity.text = movie.popularity.toString()
         releaseDate.text = movie.releaseDate
+        */
+        CoroutineScope(SupervisorJob() + Dispatchers.IO).launch  {
+            println("Корутина выполняется на потоке: ${Thread.currentThread().name}")
+            val movieId = arguments?.getInt(ARG_ID) ?: 550
+            println("movieId:"+ movieId)
+            val movie: Movie = Api().getMovie(movieId)
+            //получаем фильм
+            println("Movie:"+ Movie)
+            poster.load("${BuildConfig.API_IMAGE_BASE_URL}${movie.posterPath}") {
+                transformations(RoundedCornersTransformation(16f))
+            }
+            originalTitle.text = movie.originalTitle
+            overview.text = movie.overview
+            popularity.text = movie.popularity.toString()
+            releaseDate.text = movie.releaseDate
+        }
 
         activity?.onBackPressedDispatcher?.addCallback(this.viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -46,6 +67,11 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
                 transaction.commit()
             }
         })
+
+
+
+
+
     }
 
     companion object {

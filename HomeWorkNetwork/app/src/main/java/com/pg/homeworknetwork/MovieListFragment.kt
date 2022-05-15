@@ -7,11 +7,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+//
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
     lateinit var recycler: RecyclerView
 
-    private val goToDetails = object : MovieItemAdapter.IOnItemClick {
+     private val goToDetails = object : MovieItemAdapter.IOnItemClick {
         override fun onItemClick(movie: Movie) {
             val manager: FragmentManager = parentFragmentManager
             val transaction: FragmentTransaction = manager.beginTransaction()
@@ -31,8 +34,16 @@ class MovieListFragment : Fragment(R.layout.fragment_movie_list) {
             }
         }
         val adapter = (recycler.adapter as MovieItemAdapter)
-        val movies = //получаем фильмы
+      /*  val movies = //получаем фильмы
         adapter.submitList(movies)
+
+       */
+        CoroutineScope(SupervisorJob() + Dispatchers.Main).launch (Dispatchers.IO) {
+            val movies: Movies = Api().getMovies()
+            println("movies:"+ movies)
+            adapter.submitList(movies.result)
+            println("adapter:"+ adapter)
+        }
         super.onViewCreated(view, savedInstanceState)
     }
 
