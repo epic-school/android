@@ -46,9 +46,15 @@ abstract class NoteDatabase : RoomDatabase() {
                     database.execSQL("ALTER TABLE $NOTE_TABLE " +
                             "ADD COLUMN ${NoteEntity.COLUMN_PERSON_NAME} TEXT NOT NULL " +
                             "DEFAULT ('${PersonEntity.DEFAULT_PERSON_NAME}')")
+                    // /*в принципе можно и здесь - пусть это будет 2ая версия*/database.execSQL("ALTER TABLE $NOTE_TABLE ADD COLUMN ${NoteEntity.COLUMN_IS_COMPLETED}  INTEGER NOT NULL DEFAULT(0)")
                 }
             },
             // TODO Добавить миграцию.
+            object : Migration(2, 3) {
+                override fun migrate(database: SupportSQLiteDatabase) {
+                    database.execSQL("ALTER TABLE $NOTE_TABLE ADD COLUMN ${NoteEntity.COLUMN_IS_COMPLETED}  INTEGER NOT NULL DEFAULT(0)")
+                }
+            },
         )
 
         private fun createDatabaseInstance(application: Application): NoteDatabase {

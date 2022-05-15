@@ -10,7 +10,7 @@ import com.example.epicdatabaseexample.ui.NavigationCommand
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-
+const val ver = 1
 class NoteListViewModel constructor(
     private val noteDao: NoteDao,
 ) : ViewModel() {
@@ -65,6 +65,19 @@ class NoteListViewModel constructor(
 
     fun onIsCompletedClick(note: NoteEntity) {
         // TODO Добавить вызов noteDao для обновления элемента в таблице.
+        if (ver == 1)
+        {
+            compositeDisposable.add(noteDao.updateNote2(note)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe())
+        } else
+        {
+            compositeDisposable.add(noteDao.updateNote(note.title,note.description,note.personName,note.isCompleted,note.id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe())
+        }
     }
 
     override fun onCleared() {

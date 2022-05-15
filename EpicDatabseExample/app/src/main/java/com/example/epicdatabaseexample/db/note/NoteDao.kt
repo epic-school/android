@@ -30,4 +30,11 @@ abstract class NoteDao {
     //  Что можно указать в качестве возвращаемого типа?
     //  Напомню, что выше есть метод observeNoteList, который будет вызываться при любом
     //  изменении списка в Базе Данных.
+
+    @Query("update note_table set  title  = :noteTitle, DESCRIPTIONS = :noteDescription," +
+            "PERSON_NAME =  :notePersonName, IS_COMPLETED = :noteIsCompleted  where  id =:noteId")
+    abstract fun updateNote(noteTitle: String,  noteDescription: String , notePersonName: String , noteIsCompleted: Boolean, noteId: Int) :  Completable
+
+    @Update(/*entity =  NoteEntity::class,*/onConflict = OnConflictStrategy.REPLACE)
+    abstract fun updateNote2(obj: NoteEntity):  Completable
 }
