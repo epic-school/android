@@ -20,15 +20,38 @@ class NoteListAdapter(
             onNoteClick.invoke(note.id)
         }
         holder.personName.text = note.personName
-        // TODO Раскомментировать, после добавления нового поля в NoteEntity.
-//        holder.isCompleted.setOnClickListener {
-//            onIsCompletedClick.invoke(note.copy(
-//                isCompleted = !note.isCompleted
-//            ))
-//        }
-//        val isCompletedChanged = note.isCompleted != holder.isCompleted.isChecked
-//        if (isCompletedChanged) {
-//            holder.isCompleted.isChecked = note.isCompleted
-//        }
+        holder.isCompleted.setOnClickListener {
+            onIsCompletedClick.invoke(
+                note.copy(
+                    isCompleted = !note.isCompleted
+                )
+            )
+        }
+        val isCompletedChanged = note.isCompleted != holder.isCompleted.isChecked
+        if (isCompletedChanged) {
+            holder.isCompleted.isChecked = note.isCompleted
+        }
+    }
+
+    override fun onBindViewHolder(
+        holder: NoteViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+            return
+        }
+        val note = getItem(position)
+        holder.isCompleted.setOnClickListener {
+            onIsCompletedClick.invoke(
+                note.copy(
+                    isCompleted = !note.isCompleted
+                )
+            )
+        }
+        val notePayload = payloads.first() as NoteDiffUtilCallback.NotePayload
+        if (notePayload.isCompleteChanged)
+            holder.isCompleted.isChecked = note.isCompleted
     }
 }
