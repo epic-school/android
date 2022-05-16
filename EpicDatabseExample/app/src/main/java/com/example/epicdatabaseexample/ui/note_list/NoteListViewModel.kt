@@ -64,7 +64,10 @@ class NoteListViewModel constructor(
     }
 
     fun onIsCompletedClick(note: NoteEntity) {
-        // TODO Добавить вызов noteDao для обновления элемента в таблице.
+        compositeDisposable.add(noteDao.updateNote(note)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe())
     }
 
     override fun onCleared() {
