@@ -22,6 +22,9 @@ data class NoteEntity(
     @ColumnInfo(name = COLUMN_PERSON_NAME)
     var personName: String = PersonEntity.DEFAULT_PERSON_NAME,
 
+    @ColumnInfo(name = COLUMN_IS_COMPLETED)
+    var isCompleted: Boolean = false
+
     // TODO Нужно добавить нове поле isCompleted типа Boolean.
     //  В SQLite не поддерживается Boolean, но в Room его можно использовать.
     //  Поэтому поле делаем именно Boolean, а при добавлении миграции - нужно будет погуглить,
@@ -33,5 +36,6 @@ data class NoteEntity(
         const val COLUMN_TITLE = "title"
         const val COLUMN_DESCRIPTION = "descriptions"
         const val COLUMN_PERSON_NAME = "person_name"
+        const val COLUMN_IS_COMPLETED = "is_completed"
     }
 }

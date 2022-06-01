@@ -21,14 +21,14 @@ class NoteListAdapter(
         }
         holder.personName.text = note.personName
         // TODO Раскомментировать, после добавления нового поля в NoteEntity.
-//        holder.isCompleted.setOnClickListener {
-//            onIsCompletedClick.invoke(note.copy(
-//                isCompleted = !note.isCompleted
-//            ))
-//        }
-//        val isCompletedChanged = note.isCompleted != holder.isCompleted.isChecked
-//        if (isCompletedChanged) {
-//            holder.isCompleted.isChecked = note.isCompleted
-//        }
+        holder.isCompleted.setOnClickListener {
+            onIsCompletedClick.invoke(note.copy(
+                isCompleted = !note.isCompleted
+            ))
+        }
+        val isCompletedChanged = note.isCompleted != holder.isCompleted.isChecked
+        if (isCompletedChanged) {
+            holder.isCompleted.isChecked = note.isCompleted
+        }
     }
 }
