@@ -35,9 +35,11 @@ class NoteListViewModel constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { noteList ->
-                    state.postValue(NoteListViewState(
-                        noteList = noteList
-                    ))
+                    state.postValue(
+                        NoteListViewState(
+                            noteList = noteList
+                        )
+                    )
                 }
         )
     }
@@ -48,9 +50,11 @@ class NoteListViewModel constructor(
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    state.postValue(state.value!!.copy(
-                        noteList = emptyList()
-                    ))
+                    state.postValue(
+                        state.value!!.copy(
+                            noteList = emptyList()
+                        )
+                    )
                 }
         )
     }
@@ -64,7 +68,27 @@ class NoteListViewModel constructor(
     }
 
     fun onIsCompletedClick(note: NoteEntity) {
-        // TODO Добавить вызов noteDao для обновления элемента в таблице.
+        /*compositeDisposable.add(
+            noteDao.insertNote(note)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        )*/
+
+       /* compositeDisposable.add(
+            noteDao.updateNote(note)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        )*/
+
+        compositeDisposable.add(
+            noteDao.setCompleted(note.id, note.isCompleted)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe()
+        )
+
     }
 
     override fun onCleared() {
