@@ -30,4 +30,9 @@ abstract class NoteDao {
     //  Что можно указать в качестве возвращаемого типа?
     //  Напомню, что выше есть метод observeNoteList, который будет вызываться при любом
     //  изменении списка в Базе Данных.
+    @Update
+    abstract fun updateNote(note: NoteEntity): Completable
+
+    @Update
+    abstract fun updateAll(notes: List<NoteEntity>): Completable
 }
