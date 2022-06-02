@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import coil.load
 import coil.transform.RoundedCornersTransformation
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
     lateinit var poster: ImageView
@@ -29,14 +31,25 @@ class MovieDetailFragment : Fragment(R.layout.fragment_movie_preview) {
         }
 
         val movieId = arguments?.getInt(ARG_ID) ?: 550
-        val movie = //получаем фильм
-        poster.load("${BuildConfig.API_IMAGE_BASE_URL}${movie.posterPath}") {
-            transformations(RoundedCornersTransformation(16f))
-        }
-        originalTitle.text = movie.originalTitle
-        overview.text = movie.overview
-        popularity.text = movie.popularity.toString()
-        releaseDate.text = movie.releaseDate
+
+        ApiObj.getApi().getMovie(movieId)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe (
+                { movie ->
+                    println("MOVIE OBJECT --> $movie")
+                    poster.load("${BuildConfig.API_IMAGE_BASE_URL}${movie.posterPath}") {
+                        transformations(RoundedCornersTransformation(16f))
+                    }
+                    originalTitle.text = movie.originalTitle
+                    overview.text = movie.overview
+                    popularity.text = movie.popularity.toString()
+                    releaseDate.text = movie.releaseDate
+                },
+                {
+                    println(it.message)
+                }
+        )
 
         activity?.onBackPressedDispatcher?.addCallback(this.viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

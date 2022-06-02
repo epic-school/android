@@ -1,5 +1,6 @@
 package com.example.epicdatabaseexample.db.note
 
+import android.provider.ContactsContract
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Maybe
@@ -26,7 +27,10 @@ abstract class NoteDao {
     @Query("DELETE FROM note_table")
     abstract fun deleteAllNote(): Completable
 
-    // TODO Добавить метод для обновления одного элемента.
+    @Update
+    abstract fun updateNote(note: NoteEntity) : Completable
+
+    // TODO Добавить метод для обновления одного элемента. ✓
     //  Что можно указать в качестве возвращаемого типа?
     //  Напомню, что выше есть метод observeNoteList, который будет вызываться при любом
     //  изменении списка в Базе Данных.
