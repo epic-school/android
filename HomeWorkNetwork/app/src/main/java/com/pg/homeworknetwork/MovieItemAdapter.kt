@@ -50,7 +50,7 @@ internal class MovieItemAdapter : ListAdapter<Movie, MovieItemAdapter.ViewHolder
                 clickListener?.onItemClick(movie)
             }
             image.requestLayout()
-            itemTitle.text = movie.title
+            itemTitle.text = movie.originalTitle
 
             image.load("${BuildConfig.API_IMAGE_BASE_URL}${movie.posterPath}") {
                 transformations(RoundedCornersTransformation(16f))
