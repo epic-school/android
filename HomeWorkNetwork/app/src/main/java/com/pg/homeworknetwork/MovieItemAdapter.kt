@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 
-internal class MovieItemAdapter : ListAdapter<Movie, MovieItemAdapter.ViewHolder>(MOVIE_COMPARATOR) {
+internal class MovieItemAdapter : ListAdapter<User, MovieItemAdapter.ViewHolder>(COMPARATOR) {
     private var clickListener: IOnItemClick? = null
 
     fun setClickListener(listener: IOnItemClick?) {
@@ -37,7 +37,7 @@ internal class MovieItemAdapter : ListAdapter<Movie, MovieItemAdapter.ViewHolder
     }
 
     interface IOnItemClick {
-        fun onItemClick(movie: Movie)
+        fun onItemClick(user: User)
     }
 
     internal inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -45,30 +45,30 @@ internal class MovieItemAdapter : ListAdapter<Movie, MovieItemAdapter.ViewHolder
         private var image: ImageView = itemView.findViewById(R.id.image)
         private var itemTitle: TextView = itemView.findViewById(R.id.itemTitle)
 
-        fun bind(movie: Movie) {
+        fun bind(user: User) {
             itemView.setOnClickListener {
-                clickListener?.onItemClick(movie)
+                clickListener?.onItemClick(user)
             }
             image.requestLayout()
-            itemTitle.text = movie.title
+            itemTitle.text = user.email
 
-            image.load("${BuildConfig.API_IMAGE_BASE_URL}${movie.posterPath}") {
+            image.load("${user.avatar}") {
                 transformations(RoundedCornersTransformation(16f))
             }
         }
     }
 
     companion object {
-        val MOVIE_COMPARATOR = object : DiffUtil.ItemCallback<Movie>() {
-            override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+        val COMPARATOR = object : DiffUtil.ItemCallback<User>() {
+            override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
                 return oldItem == newItem
             }
 
-            override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
+            override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
                 return oldItem.id == newItem.id
             }
 
-            override fun getChangePayload(oldItem: Movie, newItem: Movie): Any? {
+            override fun getChangePayload(oldItem: User, newItem: User): Any? {
                 return null
             }
         }
